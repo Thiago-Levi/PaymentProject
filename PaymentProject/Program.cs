@@ -30,10 +30,10 @@ namespace PaymentProject
 
             Contract contract = new Contract(numberOfContract, inicialDateOfContract, contractValue);
             
-            //Console.WriteLine(contract);
 
-            ContractService contractService = new ContractService(numberOfInstallments);
+            ContractService contractService = new ContractService(numberOfInstallments, new PaypalTaxService());
             contractService.ProcessingContract(contract);
+
 
         }
     }

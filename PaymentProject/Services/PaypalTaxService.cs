@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentProject.Services
 {
-    internal class PaypalTaxService
+    internal class PaypalTaxService : ITaxServicePayment
     {
         public double TaxCalculations(int currentInstallment, double valueOfInstallment)
         {

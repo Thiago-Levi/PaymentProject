@@ -8,23 +8,24 @@ namespace PaymentProject.Services
 {
     internal class ContractService
     {
-        public int NumbersOfInstallments { get; set; }
+        public int MaxOfInstallments { get; set; }
+        public ITaxServicePayment TaxServicePayment { get; private set; }
 
-        public ContractService(int numbersOfInstallments)
+        public ContractService(int maxOfInstallments, ITaxServicePayment taxServicePayment)
         {
-            NumbersOfInstallments = numbersOfInstallments;
+            MaxOfInstallments = maxOfInstallments;
+            TaxServicePayment = taxServicePayment;
         }
 
         public void ProcessingContract(Contract contract)
         {
 
-            for (int i = 1; i <= NumbersOfInstallments; i++)
+            for (int currentInstallment = 1; currentInstallment <= MaxOfInstallments; currentInstallment++)
             {
-                DateTime dueDate = contract.Date.AddMonths(i);
-                
-                PaypalTaxService pay = new PaypalTaxService();
-                double valueOfInstallment = contract.TotalValue / NumbersOfInstallments;
-                double amount = pay.TaxCalculations(i, valueOfInstallment);
+                DateTime dueDate = contract.Date.AddMonths(currentInstallment);
+
+                double valueOfInstallment = contract.TotalValue / MaxOfInstallments;
+                double amount = TaxServicePayment.TaxCalculations(currentInstallment, valueOfInstallment);
 
                 Installment installment = new Installment(dueDate, amount);
                 contract.Installments.Add(installment);
